@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kas Organisasi</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Kas Organisasi</h1>
+        <p>Bayar kas dan lihat laporan pengeluaran real-time untuk setiap anggota.</p>
+      </header>
+
+      <section id="login-section" class="card">
+        <h2>Masuk sebagai Anggota</h2>
+        <div class="form-row">
+          <input type="text" id="user-name" placeholder="Nama anggota" />
+          <button id="start-btn">Mulai</button>
+        </div>
+        <p class="tip">Masukkan <strong>Bandahara</strong> untuk masuk sebagai admin dan melihat akun bank/e-wallet anggota.</p>
+      </section>
+
+      <section id="app-section" class="hidden">
+        <div id="notification-container" class="notification-container"></div>
+
+        <div class="top-row">
+          <div class="card profile-card">
+            <h2>Pengguna</h2>
+            <p id="current-user"></p>
+            <p id="current-role" class="secondary-text"></p>
+            <p id="current-account" class="account-label"></p>
+            <button id="logout-btn" class="secondary">Ganti pengguna</button>
+          </div>
+
+          <div class="card report-card">
+            <h2>Ringkasan Global</h2>
+            <div class="metrics">
+              <div>
+                <span>Kas Masuk</span>
+                <strong id="global-income">0</strong>
+              </div>
+              <div>
+                <span>Pengeluaran</span>
+                <strong id="global-expense">0</strong>
+              </div>
+              <div>
+                <span>Saldo</span>
+                <strong id="global-balance">0</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card action-card">
+          <h2>Bayar Kas / Catat Pengeluaran</h2>
+          <form id="transaction-form">
+            <div class="form-grid">
+              <label>
+                Jenis
+                <select id="transaction-type">
+                  <option value="income">Bayar Kas</option>
+                  <option value="expense">Pengeluaran</option>
+                </select>
+              </label>
+              <label>
+                Jumlah (Rp)
+                <input type="number" id="transaction-amount" min="1" step="0.01" required />
+              </label>
+              <label>
+                Kategori
+                <input type="text" id="transaction-category" placeholder="Contoh: ATK, konsumsi" />
+              </label>
+              <label class="full-width">
+                Keterangan
+                <input type="text" id="transaction-description" placeholder="Deskripsi singkat" />
+              </label>
+            </div>
+            <button type="submit">Simpan Transaksi</button>
+          </form>
+        </div>
+
+        <div class="card account-card">
+          <h2>Rekening Bank / E-Wallet</h2>
+          <p id="account-info">Informasi akun anggota akan muncul di sini.</p>
+          <form id="account-form">
+            <div class="form-grid">
+              <label>
+                Jenis Akun
+                <input type="text" id="account-type" placeholder="Contoh: BCA, GoPay, OVO" />
+              </label>
+              <label>
+                Nama Akun
+                <input type="text" id="account-name" placeholder="Nama pemilik rekening" />
+              </label>
+              <label class="full-width">
+                Nomor / ID Akun
+                <input type="text" id="account-number" placeholder="Contoh: 1234567890 atau 081234567890" />
+              </label>
+            </div>
+            <button type="submit">Simpan Info Akun</button>
+          </form>
+        </div>
+
+        <div id="admin-panel" class="card admin-card hidden">
+          <h2>Panel Bandahara</h2>
+          <p>Admin dapat melihat koneksi bank/e-wallet setiap anggota dan status laporan.</p>
+          <table>
+            <thead>
+              <tr>
+                <th>Nama</th>
+                <th>Role</th>
+                <th>Akun</th>
+                <th>Nomor</th>
+              </tr>
+            </thead>
+            <tbody id="user-accounts-body"></tbody>
+          </table>
+        </div>
+
+        <div class="card user-report-card">
+          <h2>Laporan Anggota</h2>
+          <div class="metrics small-metrics">
+            <div>
+              <span>Penghasilan Anda</span>
+              <strong id="user-income">0</strong>
+            </div>
+            <div>
+              <span>Pengeluaran Anda</span>
+              <strong id="user-expense">0</strong>
+            </div>
+            <div>
+              <span>Saldo Anda</span>
+              <strong id="user-balance">0</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="card table-card">
+          <h2>Laporan Pengeluaran Real-Time</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Nama</th>
+                <th>Kas Masuk</th>
+                <th>Pengeluaran</th>
+                <th>Saldo</th>
+              </tr>
+            </thead>
+            <tbody id="user-summary-body"></tbody>
+          </table>
+        </div>
+
+        <div class="card transactions-card">
+          <h2>Riwayat Transaksi</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Waktu</th>
+                <th>Nama</th>
+                <th>Tipe</th>
+                <th>Jumlah</th>
+                <th>Kategori</th>
+                <th>Keterangan</th>
+              </tr>
+            </thead>
+            <tbody id="transactions-body"></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+    <script src="app.js"></script>
+  </body>
+</html>

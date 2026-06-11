@@ -1,0 +1,18 @@
+{
+  "name": "kas-organisasi",
+  "version": "1.0.0",
+  "description": "Sistem pencatatan laporan keuangan organisasi dengan pembayaran kas dan laporan pengeluaran real-time",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "tunnel": "localtunnel --port 3001"
+  },
+  "dependencies": {
+    "express": "^4.18.4",
+    "socket.io": "^4.7.2",
+    "sqlite3": "^5.1.6"
+  },
+  "devDependencies": {
+    "localtunnel": "^2.0.2"
+  }
+}

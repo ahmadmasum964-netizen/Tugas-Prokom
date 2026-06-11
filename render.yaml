@@ -1,0 +1,8 @@
+services:
+  - type: web
+    name: kas-organisasi
+    env: node
+    branch: main
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
